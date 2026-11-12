@@ -1,0 +1,513 @@
+﻿@model SmartFarmSystem.Models.LeaveRequest
+@{
+    ViewData["Title"] = "Request Leave";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-leave-form {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 12px;
+    }
+
+        .sf-leave-form .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .sf-leave-form label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--ink);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .sf-leave-form .form-control {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1px solid var(--furrow);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: #FAF8F2;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+            .sf-leave-form .form-control:focus {
+                outline: none;
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+            .sf-leave-form .form-control.is-invalid {
+                border-color: #B5502D;
+                box-shadow: 0 0 0 3px rgba(181, 80, 45, 0.12);
+            }
+
+            .sf-leave-form .form-control.is-valid {
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+        .sf-leave-form .text-danger {
+            font-size: 0.8rem;
+            color: #B5502D;
+            display: block;
+            margin-top: 0.3rem;
+        }
+
+        .sf-leave-form .validation-summary-errors {
+            background: #FDE8E5;
+            border: 1px solid #F5D0C8;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            color: #B5502D;
+        }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.55rem 1.2rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+        .sf-btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+        }
+
+    .sf-page-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-page-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0 0 0.3rem;
+        color: var(--ink);
+    }
+
+    .sf-page-subtitle {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-leave-form hr {
+        border: none;
+        border-top: 1px dashed var(--furrow);
+        margin: 1.2rem 0;
+    }
+
+    /* Worker info card */
+    .sf-worker-info {
+        background: var(--husk);
+        border-radius: 8px;
+        padding: 0.8rem 1.2rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+        .sf-worker-info i {
+            font-size: 1.5rem;
+            color: var(--field);
+        }
+
+        .sf-worker-info .label {
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sf-worker-info .name {
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+    /* Days summary */
+    .sf-days-summary {
+        background: #E7F1E3;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        margin-top: 0.5rem;
+        display: none;
+        font-size: 0.9rem;
+        color: var(--field-deep);
+    }
+
+        .sf-days-summary.visible {
+            display: block;
+        }
+
+        .sf-days-summary strong {
+            font-weight: 700;
+        }
+</style>
+
+<div class="sf-leave-form">
+    <span class="sf-page-eyebrow">Request leave</span>
+    <h1 class="sf-page-title">Request Leave</h1>
+    <p class="sf-page-subtitle">Submit a leave request for review by your manager.</p>
+
+    <!-- Worker Info (Auto-detected) -->
+    @if (ViewBag.WorkerName != null)
+    {
+        <div class="sf-worker-info">
+            <i class="fas fa-user-circle"></i>
+            <div>
+                <div class="label">Requesting on behalf of</div>
+                <div class="name">@ViewBag.WorkerName <span style="font-weight:400;font-size:0.8rem;color:var(--ink-soft);">(@ViewBag.WorkerId)</span></div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning" style="border-radius:8px;padding:0.8rem 1.2rem;background:#FCF0DC;border:1px solid #EFD9A8;color:#9C6A1E;">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            You are not linked to a worker profile. Please contact your manager.
+        </div>
+    }
+
+    <form asp-action="Create" method="post" id="leaveForm" novalidate>
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger validation-summary-errors" role="alert"></div>
+
+        <!-- Hidden WorkerId (auto-assigned from controller) -->
+        <input type="hidden" asp-for="WorkerId" />
+
+        <div class="form-group">
+            <label asp-for="LeaveType">Leave Type</label>
+            <select asp-for="LeaveType" class="form-control" id="LeaveType">
+                <option value="">-- Select Leave Type --</option>
+                <option value="Annual">Annual Leave</option>
+                <option value="Sick">Sick Leave</option>
+                <option value="Vacation">Vacation</option>
+                <option value="Personal">Personal Leave</option>
+                <option value="Unpaid">Unpaid Leave</option>
+            </select>
+            <span asp-validation-for="LeaveType" class="text-danger" id="leaveTypeError"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="StartDate">Start Date</label>
+            <input asp-for="StartDate" class="form-control" type="date" id="StartDate" />
+            <span asp-validation-for="StartDate" class="text-danger" id="startDateError"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="EndDate">End Date</label>
+            <input asp-for="EndDate" class="form-control" type="date" id="EndDate" />
+            <span asp-validation-for="EndDate" class="text-danger" id="endDateError"></span>
+        </div>
+
+        <!-- Days Summary -->
+        <div class="sf-days-summary" id="daysSummary">
+            <i class="fas fa-clock me-1"></i>
+            <span>Total days requested: <strong id="totalDays">0</strong></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Reason">Reason</label>
+            <textarea asp-for="Reason" class="form-control" rows="3" id="Reason" placeholder="Please provide a reason for your leave request..."></textarea>
+            <span asp-validation-for="Reason" class="text-danger" id="reasonError"></span>
+        </div>
+
+        <hr />
+
+        <div class="d-flex gap-2 flex-wrap">
+            <button type="submit" class="sf-btn sf-btn-primary" id="submitBtn">
+                <i class="fas fa-paper-plane me-1"></i> Submit Request
+            </button>
+            <a asp-action="Index" class="sf-btn sf-btn-outline">
+                <i class="fas fa-arrow-left me-1"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+
+            // ===== DOM ELEMENTS =====
+            const leaveType = $('#LeaveType');
+            const startDate = $('#StartDate');
+            const endDate = $('#EndDate');
+            const reason = $('#Reason');
+            const submitBtn = $('#submitBtn');
+            const daysSummary = $('#daysSummary');
+            const totalDaysSpan = $('#totalDays');
+
+            const leaveTypeError = $('#leaveTypeError');
+            const startDateError = $('#startDateError');
+            const endDateError = $('#endDateError');
+            const reasonError = $('#reasonError');
+
+            // ===== HELPER FUNCTIONS =====
+
+            // Clear previous validation states
+            function clearValidation(field) {
+                field.removeClass('is-invalid is-valid');
+                field.closest('.form-group').find('.text-danger').text('');
+            }
+
+            // Set error state
+            function setError(field, errorElement, message) {
+                field.addClass('is-invalid').removeClass('is-valid');
+                errorElement.text(message);
+            }
+
+            // Set valid state
+            function setValid(field, errorElement) {
+                field.removeClass('is-invalid').addClass('is-valid');
+                errorElement.text('');
+            }
+
+            // Calculate days between two dates
+            function calculateDays(start, end) {
+                if (!start || !end) return 0;
+                const startDate = new Date(start);
+                const endDate = new Date(end);
+                const diffTime = endDate - startDate;
+                if (diffTime < 0) return 0;
+                return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            }
+
+            // Update days summary
+            function updateDaysSummary() {
+                const start = startDate.val();
+                const end = endDate.val();
+                if (start && end) {
+                    const days = calculateDays(start, end);
+                    if (days > 0) {
+                        totalDaysSpan.text(days);
+                        daysSummary.addClass('visible');
+                    } else {
+                        daysSummary.removeClass('visible');
+                    }
+                } else {
+                    daysSummary.removeClass('visible');
+                }
+            }
+
+            // ===== VALIDATION FUNCTIONS =====
+
+            function validateLeaveType() {
+                const value = leaveType.val();
+                if (!value || value === '') {
+                    setError(leaveType, leaveTypeError, 'Please select a leave type.');
+                    return false;
+                } else {
+                    setValid(leaveType, leaveTypeError);
+                    return true;
+                }
+            }
+
+            function validateStartDate() {
+                const value = startDate.val();
+                if (!value) {
+                    setError(startDate, startDateError, 'Start date is required.');
+                    return false;
+                }
+
+                const selectedDate = new Date(value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (selectedDate < today) {
+                    setError(startDate, startDateError, 'Start date cannot be in the past.');
+                    return false;
+                }
+
+                setValid(startDate, startDateError);
+                return true;
+            }
+
+            function validateEndDate() {
+                const startVal = startDate.val();
+                const endVal = endDate.val();
+
+                if (!endVal) {
+                    setError(endDate, endDateError, 'End date is required.');
+                    return false;
+                }
+
+                if (startVal) {
+                    const start = new Date(startVal);
+                    const end = new Date(endVal);
+                    if (end < start) {
+                        setError(endDate, endDateError, 'End date cannot be before start date.');
+                        return false;
+                    }
+                }
+
+                setValid(endDate, endDateError);
+                return true;
+            }
+
+            function validateReason() {
+                const value = reason.val().trim();
+                if (!value || value.length < 5) {
+                    setError(reason, reasonError, 'Please provide a reason (minimum 5 characters).');
+                    return false;
+                } else {
+                    setValid(reason, reasonError);
+                    return true;
+                }
+            }
+
+            // ===== FULL FORM VALIDATION =====
+
+            function validateForm() {
+                const isLeaveTypeValid = validateLeaveType();
+                const isStartDateValid = validateStartDate();
+                const isEndDateValid = validateEndDate();
+                const isReasonValid = validateReason();
+
+                // Enable/disable submit button based on validation
+                const allValid = isLeaveTypeValid && isStartDateValid && isEndDateValid && isReasonValid;
+                submitBtn.prop('disabled', !allValid);
+
+                return allValid;
+            }
+
+            // ===== EVENT LISTENERS =====
+
+            // Live validation on change/input
+            leaveType.on('change', function() {
+                validateLeaveType();
+                validateForm();
+            });
+
+            startDate.on('change', function() {
+                validateStartDate();
+                validateEndDate();
+                updateDaysSummary();
+                validateForm();
+            });
+
+            endDate.on('change', function() {
+                validateEndDate();
+                updateDaysSummary();
+                validateForm();
+            });
+
+            reason.on('input', function() {
+                validateReason();
+                validateForm();
+            });
+
+            // ===== FORM SUBMIT =====
+
+            $('#leaveForm').on('submit', function(e) {
+                // Run all validations
+                const isLeaveTypeValid = validateLeaveType();
+                const isStartDateValid = validateStartDate();
+                const isEndDateValid = validateEndDate();
+                const isReasonValid = validateReason();
+
+                const allValid = isLeaveTypeValid && isStartDateValid && isEndDateValid && isReasonValid;
+
+                if (!allValid) {
+                    e.preventDefault();
+                    // Scroll to first error
+                    const firstError = $('.is-invalid:first');
+                    if (firstError.length) {
+                        $('html, body').animate({
+                            scrollTop: firstError.offset().top - 150
+                        }, 300);
+                    }
+                    submitBtn.prop('disabled', true);
+                    return false;
+                }
+
+                // If all valid, enable button and allow submit
+                submitBtn.prop('disabled', false);
+                return true;
+            });
+
+            // ===== INITIAL STATE =====
+
+            // Disable submit button initially
+            submitBtn.prop('disabled', true);
+
+            // Set default date to today for start date
+            const today = new Date().toISOString().split('T')[0];
+            if (!startDate.val()) {
+                startDate.val(today);
+            }
+
+            // Set default end date to 7 days from today
+            const sevenDaysLater = new Date();
+            sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+            const endDefault = sevenDaysLater.toISOString().split('T')[0];
+            if (!endDate.val()) {
+                endDate.val(endDefault);
+            }
+
+            // Trigger initial validation
+            validateForm();
+            updateDaysSummary();
+
+            // ===== REAL-TIME DAYS COUNTER =====
+            // Also update when dates change via keyboard
+            startDate.on('input', updateDaysSummary);
+            endDate.on('input', updateDaysSummary);
+        });
+    </script>
+}

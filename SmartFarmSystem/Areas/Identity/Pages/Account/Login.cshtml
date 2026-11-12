@@ -1,0 +1,61 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="sf-book">
+    <div class="sf-cover">
+        <div>
+            <svg class="sf-brand-mark" viewBox="0 0 34 34" fill="none" stroke="#E9F1E6" stroke-width="1.6">
+                <path d="M6 28c6-12 9-16.5 11-21 2 4.5 5 9 11 21" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M17 9v19" stroke-linecap="round" />
+            </svg>
+            <div class="sf-brand">SmartFarm</div>
+            <div class="sf-cover-title">Welcome back to SmartFarm.</div>
+            <p class="sf-cover-sub">Log in to access your dashboard, review your projects, track tasks, and stay on top of your farm operations.</p>
+        </div>
+        <div class="sf-cover-foot">SmartFarm · Returning user</div>
+    </div>
+
+    <div class="sf-page">
+        <div class="sf-dogear"></div>
+        <span class="sf-page-eyebrow">Sign in to continue</span>
+        <h1 class="sf-page-title">@ViewData["Title"]</h1>
+        <hr />
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="sf-field">
+                <label asp-for="Input.Email">Email</label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="sf-field">
+                <label asp-for="Input.Password">Password</label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <label class="sf-remember" asp-for="Input.RememberMe">
+                <input class="form-check-input" asp-for="Input.RememberMe" />
+                @Html.DisplayNameFor(m => m.Input.RememberMe)
+            </label>
+
+            <button id="login-submit" type="submit" class="sf-submit">Log in</button>
+
+            <p class="sf-switch">
+                New here?
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="~/css/auth-book.css" />
+    <script src="~/js/auth-book.js"></script>
+}

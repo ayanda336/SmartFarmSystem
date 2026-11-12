@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Reply";
+    var original = ViewBag.Original as SmartFarmSystem.Models.Message;
+    var receiverId = ViewBag.ReceiverId as string;
+    var subject = ViewBag.Subject as string;
+}
+
+<div style="max-width: 700px; margin: 0 auto; padding: 2rem; background: #FFFDF8; border: 1px solid #E7DEC7; border-radius: 12px;">
+    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #2E4F27; display: block; margin-bottom: 0.4rem;">Reply</span>
+    <h1 style="font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.8rem; margin: 0 0 1.5rem; color: #2B2116;">Reply to Message</h1>
+
+    @if (original != null)
+    {
+        <div style="background: #F4EFE2; padding: 0.8rem 1rem; border-radius: 6px; margin-bottom: 1.5rem; font-size: 0.85rem; color: #7C7565;">
+            <strong>Original message from @original.Sender?.Email:</strong>
+            <div style="margin-top: 0.3rem;">@original.Body</div>
+        </div>
+    }
+
+    <form asp-action="Reply" asp-route-id="@ViewBag.Original?.Id" method="post">
+        <input type="hidden" name="receiverId" value="@receiverId" />
+
+        <div class="form-group" style="margin-bottom: 1.2rem;">
+            <label for="subject" style="font-weight: 600; font-size: 0.85rem; color: #2B2116; display: block; margin-bottom: 0.3rem;">Subject</label>
+            <input id="subject" name="subject" class="form-control" value="@subject" style="width:100%; padding:0.65rem 0.9rem; border:1px solid #E7DEC7; border-radius:6px; font-size:0.95rem; background:#FAF8F2;" />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.2rem;">
+            <label for="body" style="font-weight: 600; font-size: 0.85rem; color: #2B2116; display: block; margin-bottom: 0.3rem;">Message</label>
+            <textarea id="body" name="body" class="form-control" rows="6" required placeholder="Write your reply here..." style="width:100%; padding:0.65rem 0.9rem; border:1px solid #E7DEC7; border-radius:6px; font-size:0.95rem; background:#FAF8F2;"></textarea>
+        </div>
+
+        <hr style="border: none; border-top: 1px dashed #E7DEC7; margin: 1.2rem 0;" />
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="sf-btn sf-btn-primary" style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.85rem; font-weight:600; padding:0.55rem 1.2rem; border-radius:6px; border:1px solid transparent; cursor:pointer; line-height:1.2; background:#3F6B35; color:#fff;">Send Reply</button>
+            <a asp-action="Details" asp-route-id="@ViewBag.Original?.Id" class="sf-btn sf-btn-outline" style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.85rem; font-weight:600; padding:0.55rem 1.2rem; border-radius:6px; text-decoration:none; border:1px solid #E7DEC7; cursor:pointer; line-height:1.2; background:#FFFDF8; color:#2B2116;">Cancel</a>
+        </div>
+    </form>
+</div>

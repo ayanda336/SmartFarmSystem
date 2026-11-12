@@ -1,0 +1,180 @@
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Compose Message";
+    var users = ViewBag.Users as List<IdentityUser>;
+    var receiverId = ViewBag.ReceiverId as string;
+    var receiver = users?.FirstOrDefault(u => u.Id == receiverId);
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-compose {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 12px;
+    }
+
+        .sf-compose .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .sf-compose label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--ink);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .sf-compose .form-control {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1px solid var(--furrow);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: #FAF8F2;
+            transition: border-color 0.15s ease;
+        }
+
+            .sf-compose .form-control:focus {
+                outline: none;
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+        .sf-compose .text-danger {
+            font-size: 0.8rem;
+            color: #B5502D;
+        }
+
+    .sf-page-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-page-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0 0 1.5rem;
+        color: var(--ink);
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.55rem 1.2rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+        }
+
+    .sf-compose hr {
+        border: none;
+        border-top: 1px dashed var(--furrow);
+        margin: 1.2rem 0;
+    }
+
+    .sf-recipient-info {
+        background: var(--husk);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--ink-soft);
+    }
+</style>
+
+<div class="sf-compose">
+    <span class="sf-page-eyebrow">Write a message</span>
+    <h1 class="sf-page-title">Compose Message</h1>
+
+    @if (receiver != null)
+    {
+        <div class="sf-recipient-info">
+            <i class="fas fa-user"></i> Sending to: <strong>@receiver.Email</strong>
+        </div>
+    }
+
+    <form asp-action="Compose" method="post">
+        <input type="hidden" name="parentMessageId" value="@ViewBag.ParentMessageId" />
+
+        <div class="form-group">
+            <label for="receiverId">To</label>
+            <select id="receiverId" name="receiverId" class="form-control" required>
+                <option value="">-- Select Recipient --</option>
+                @if (users != null)
+                {
+                    @foreach (var user in users)
+                    {
+                        <option value="@user.Id" selected="@(receiver?.Id == user.Id ? "selected" : null)">
+                            @user.Email
+                        </option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input id="subject" name="subject" class="form-control" value="@ViewBag.Subject" required />
+        </div>
+
+        <div class="form-group">
+            <label for="body">Message</label>
+            <textarea id="body" name="body" class="form-control" rows="6" required placeholder="Write your message here..."></textarea>
+        </div>
+
+        <hr />
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="sf-btn sf-btn-primary">Send Message</button>
+            <a asp-action="Inbox" class="sf-btn sf-btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>

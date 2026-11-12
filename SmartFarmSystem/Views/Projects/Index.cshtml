@@ -1,0 +1,204 @@
+﻿@model IEnumerable<SmartFarmSystem.Models.Project>
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-projects {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold: #C98A2B;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-projects-header { margin-bottom: 1.5rem; }
+
+    .sf-projects-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-projects-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-toolbar { margin-bottom: 1.5rem; }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.55rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .sf-btn-primary { background: var(--field); color: #fff; }
+    .sf-btn-primary:hover { background: var(--field-deep); color: #fff; }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+    .sf-btn-outline:hover { background: var(--husk); color: var(--ink); }
+
+    .sf-btn-sm { font-size: 0.78rem; padding: 0.35rem 0.7rem; }
+
+    .sf-btn-gold { background: #FCF0DC; color: var(--gold-deep); border-color: #EFD9A8; }
+    .sf-btn-gold:hover { background: #F7E4BE; color: var(--gold-deep); }
+
+    .sf-btn-clay { background: var(--clay); color: #fff; }
+    .sf-btn-clay:hover { background: #9C4224; color: #fff; }
+
+    /* Table */
+    .sf-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .sf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        margin: 0;
+    }
+
+    .sf-table thead th {
+        background: var(--husk);
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--furrow);
+    }
+
+    .sf-table tbody td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--furrow);
+        vertical-align: middle;
+    }
+
+    .sf-table tbody tr:last-child td { border-bottom: none; }
+    .sf-table tbody tr:hover { background: #FBF8F0; }
+
+    .sf-desc-cell {
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--ink-soft);
+    }
+
+    .sf-status-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .sf-status-completed { background: #E7F1E3; color: var(--field-deep); }
+    .sf-status-active { background: #E7EEF6; color: #2E4F6B; }
+    .sf-status-other { background: #FCF0DC; color: var(--gold-deep); }
+
+    .sf-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .sf-empty-note {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--ink-soft);
+    }
+</style>
+
+<div class="sf-projects">
+    <div class="sf-projects-header">
+        <span class="sf-projects-eyebrow">Farm activity management</span>
+        <h1 class="sf-projects-title">Projects</h1>
+    </div>
+
+    <div class="sf-toolbar">
+        <a asp-action="Create" class="sf-btn sf-btn-primary">+ Create New Project</a>
+    </div>
+
+    <div class="sf-panel">
+        @if (!Model.Any())
+        {
+            <div class="sf-empty-note">No projects have been created yet.</div>
+        }
+        else
+        {
+            <table class="sf-table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Description)</th>
+                        <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+                        <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+                        <th>@Html.DisplayNameFor(model => model.Status)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var statusClass = item.Status == "Completed" ? "sf-status-completed"
+                        : item.Status == "Active" ? "sf-status-active"
+                        : "sf-status-other";
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td class="sf-desc-cell" title="@item.Description">@Html.DisplayFor(modelItem => item.Description)</td>
+                            <td>@item.StartDate.ToShortDateString()</td>
+                            <td>@item.EndDate.ToShortDateString()</td>
+                            <td>
+                                <span class="sf-status-badge @statusClass">@Html.DisplayFor(modelItem => item.Status)</span>
+                            </td>
+                            <td>
+                                <div class="sf-actions">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="sf-btn sf-btn-sm sf-btn-gold">Edit</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="sf-btn sf-btn-sm sf-btn-outline">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="sf-btn sf-btn-sm sf-btn-clay">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

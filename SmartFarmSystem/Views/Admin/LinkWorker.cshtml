@@ -1,0 +1,228 @@
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Link Worker to User";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-admin {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold: #C98A2B;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-admin-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .sf-admin-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-admin-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.7rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-info-panel {
+        background: var(--husk);
+        border: 1px solid var(--furrow);
+        border-left: 3px solid var(--field);
+        border-radius: 6px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.88rem;
+        color: var(--ink);
+    }
+
+        .sf-info-panel strong {
+            color: var(--field-deep);
+        }
+
+        .sf-info-panel p {
+            margin: 0.3rem 0 0;
+            color: var(--ink-soft);
+        }
+
+    .sf-warn-panel {
+        background: #FCF0DC;
+        border: 1px solid #EFD9A8;
+        border-left: 3px solid var(--gold);
+        border-radius: 6px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--gold-deep);
+    }
+
+        .sf-warn-panel p {
+            margin: 0.3rem 0 0;
+        }
+
+    .sf-formcard {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        padding: 1.75rem;
+        max-width: 560px;
+    }
+
+    .sf-field {
+        margin-bottom: 1.2rem;
+    }
+
+        .sf-field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
+        }
+
+        .sf-field .form-select {
+            border: 1px solid var(--furrow);
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.92rem;
+            width: 100%;
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+            .sf-field .form-select:focus {
+                outline: none;
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+    .sf-form-actions {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+            color: var(--ink);
+        }
+</style>
+
+<div class="sf-admin">
+    <div class="sf-admin-header">
+        <span class="sf-admin-eyebrow">Admin &middot; User management</span>
+        <h1 class="sf-admin-title">Link worker to user account</h1>
+    </div>
+
+    <div class="sf-info-panel">
+        <strong>How it works</strong>
+        <p>Select a user account and a worker profile to link them together.</p>
+        <p>This allows workers to log in and see their assigned tasks.</p>
+    </div>
+
+    @{
+        var users = ViewBag.Users as List<IdentityUser>;
+        var workers = ViewBag.Workers as List<Worker>;
+    }
+
+    @if (users == null || workers == null || !users.Any() || !workers.Any())
+    {
+        <div class="sf-warn-panel">
+            @if ((users == null || !users.Any()) && (workers == null || !workers.Any()))
+            {
+                <strong>All users and workers are already linked.</strong>
+                <p>Every user account is already connected to a worker profile, and every worker has a user account.</p>
+            }
+            else if (users == null || !users.Any())
+            {
+                <strong>No unlinked users found.</strong>
+                <p>All user accounts are already linked to a worker.</p>
+            }
+            else if (workers == null || !workers.Any())
+            {
+                <strong>No unlinked workers found.</strong>
+                <p>All worker profiles are already linked to a user.</p>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="sf-formcard">
+            <form asp-action="LinkWorker" method="post">
+                <div class="sf-field">
+                    <label>Select user account</label>
+                    <select name="userId" class="form-select" required>
+                        <option value="">-- Select User --</option>
+                        @foreach (var user in users)
+                        {
+                            <option value="@user.Id">@user.Email</option>
+                        }
+                    </select>
+                </div>
+                <div class="sf-field">
+                    <label>Select worker profile</label>
+                    <select name="workerId" class="form-select" required>
+                        <option value="">-- Select Worker --</option>
+                        @foreach (var worker in workers)
+                        {
+                            <option value="@worker.Id">@worker.FullName (Employee ID: @worker.EmployeeCode)</option>
+                        }
+                    </select>
+                </div>
+                <div class="sf-form-actions">
+                    <button type="submit" class="sf-btn sf-btn-primary">Link User to Worker</button>
+                    <a asp-action="Index" class="sf-btn sf-btn-outline">Back to Admin</a>
+                </div>
+            </form>
+        </div>
+    }
+</div>

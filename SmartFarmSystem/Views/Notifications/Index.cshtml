@@ -1,0 +1,295 @@
+﻿@model List<SmartFarmSystem.Models.Notification>
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-notifications {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold: #C98A2B;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-notif-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-notif-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-notif-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-toolbar {
+        display: flex;
+        gap: 0.6rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.55rem 1rem;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .sf-btn-gold {
+        background: #FCF0DC;
+        color: var(--gold-deep);
+        border-color: #EFD9A8;
+    }
+
+        .sf-btn-gold:hover {
+            background: #F7E4BE;
+            color: var(--gold-deep);
+        }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-sm {
+        font-size: 0.78rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    /* Empty state */
+    .sf-empty-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        text-align: center;
+        padding: 3rem 1.5rem;
+    }
+
+    .sf-empty-icon {
+        color: var(--field);
+        margin-bottom: 0.8rem;
+    }
+
+    .sf-empty-panel h2 {
+        font-family: 'Fraunces', serif;
+        font-weight: 500;
+        font-size: 1.2rem;
+        margin: 0 0 0.4rem;
+        color: var(--ink);
+    }
+
+    .sf-empty-panel p {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    /* Notification list */
+    .sf-notif-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .sf-notif-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.1rem 1.3rem;
+        border-bottom: 1px solid var(--furrow);
+        border-left: 3px solid transparent;
+    }
+
+        .sf-notif-item:last-child {
+            border-bottom: none;
+        }
+
+        .sf-notif-item.is-unread {
+            border-left-color: var(--gold);
+            background: #FFFCF5;
+        }
+
+    .sf-notif-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .sf-notif-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .sf-notif-item-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--ink);
+        margin: 0;
+    }
+
+    .sf-notif-item.is-unread .sf-notif-item-title::before {
+        content: "";
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--gold);
+        margin-right: 0.5rem;
+    }
+
+    .sf-notif-message {
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        margin: 0 0 0.5rem;
+        line-height: 1.5;
+    }
+
+    .sf-notif-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--ink-soft);
+    }
+
+    .sf-type-badge {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.15rem 0.55rem;
+        border-radius: 999px;
+        background: var(--husk);
+        color: var(--field-deep);
+    }
+
+    .sf-notif-action {
+        flex-shrink: 0;
+    }
+
+    .sf-read-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--field-deep);
+        background: #E7F1E3;
+        padding: 0.3rem 0.65rem;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="sf-notifications">
+    <div class="sf-notif-header">
+        <div>
+            <span class="sf-notif-eyebrow">Alerts &amp; updates</span>
+            <h1 class="sf-notif-title">Notifications</h1>
+        </div>
+        <div class="sf-toolbar">
+            <form asp-action="GenerateAlerts" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="sf-btn sf-btn-gold">
+                    <i class="fas fa-arrows-rotate"></i> Check Alerts
+                </button>
+            </form>
+            @if (Model.Any(n => !n.IsRead))
+            {
+                <form asp-action="MarkAllAsRead" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="sf-btn sf-btn-primary">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </form>
+            }
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="sf-empty-panel">
+            <div class="sf-empty-icon"><i class="fas fa-circle-check fa-2x"></i></div>
+            <h2>No notifications</h2>
+            <p>You're all caught up! No new notifications.</p>
+        </div>
+    }
+    else
+    {
+        <ul class="sf-notif-list">
+            @foreach (var notification in Model)
+            {
+                <li class="sf-notif-item @(notification.IsRead ? "" : "is-unread")">
+                    <div class="sf-notif-body">
+                        <div class="sf-notif-title-row">
+                            <p class="sf-notif-item-title">@notification.Title</p>
+                            @if (!string.IsNullOrEmpty(notification.Type))
+                            {
+                                <span class="sf-type-badge">@notification.Type</span>
+                            }
+                        </div>
+                        <p class="sf-notif-message">@notification.Message</p>
+                        <div class="sf-notif-meta">@notification.CreatedAt.ToString("yyyy-MM-dd HH:mm")</div>
+                    </div>
+                    <div class="sf-notif-action">
+                        @if (!notification.IsRead)
+                        {
+                            <form asp-action="MarkAsRead" asp-route-id="@notification.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="sf-btn sf-btn-sm sf-btn-primary">Mark Read</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="sf-read-badge"><i class="fas fa-check"></i> Read</span>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</div>

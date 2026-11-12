@@ -1,0 +1,244 @@
+﻿@model SmartFarmSystem.Models.TaskItem
+
+@{
+    ViewData["Title"] = "Edit Task";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-form {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-form-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-form-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-form-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.7rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-alert-danger {
+        background: #F6E4DC;
+        color: var(--clay);
+        border: 1px solid #EAC4B4;
+        border-radius: 6px;
+        padding: 0.85rem 1rem;
+        font-size: 0.88rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-formcard {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        padding: 1.75rem;
+        max-width: 680px;
+    }
+
+    .sf-field {
+        margin-bottom: 1.2rem;
+    }
+
+        .sf-field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
+        }
+
+        .sf-field .form-control,
+        .sf-field .form-select,
+        .sf-field textarea.form-control {
+            border: 1px solid var(--furrow);
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.92rem;
+            width: 100%;
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+            .sf-field .form-control:focus,
+            .sf-field .form-select:focus {
+                outline: none;
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+    .sf-field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    @@media (max-width: 560px) {
+        .sf-field-row
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    .sf-form-actions {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+            color: var(--ink);
+        }
+</style>
+
+<div class="sf-form">
+    <div class="sf-form-header">
+        <span class="sf-form-eyebrow">Task management</span>
+        <h1 class="sf-form-title">Edit Task</h1>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="sf-alert-danger"></div>
+
+    <div class="sf-formcard">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="sf-field">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="sf-field">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="sf-field-row">
+                <div class="sf-field">
+                    <label asp-for="ProjectId"></label>
+                    <select asp-for="ProjectId" class="form-select" asp-items="ViewBag.ProjectId">
+                        <option value="">-- Select Project --</option>
+                    </select>
+                    <span asp-validation-for="ProjectId" class="text-danger"></span>
+                </div>
+                <div class="sf-field">
+                    <label asp-for="WorkerId"></label>
+                    <select asp-for="WorkerId" class="form-select" asp-items="ViewBag.WorkerId">
+                        <option value="">-- Select Worker --</option>
+                    </select>
+                    <span asp-validation-for="WorkerId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="sf-field-row">
+                <div class="sf-field">
+                    <label asp-for="AssignedDate"></label>
+                    <input asp-for="AssignedDate" class="form-control" type="date" />
+                    <span asp-validation-for="AssignedDate" class="text-danger"></span>
+                </div>
+                <div class="sf-field">
+                    <label asp-for="DueDate"></label>
+                    <input asp-for="DueDate" class="form-control" type="date" />
+                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="sf-field-row">
+                <div class="sf-field">
+                    <label asp-for="Status"></label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+                <div class="sf-field">
+                    <label asp-for="ResourceId"></label>
+                    <select asp-for="ResourceId" class="form-select" asp-items="ViewBag.ResourceId">
+                        <option value="">-- None --</option>
+                    </select>
+                    <span asp-validation-for="ResourceId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="sf-field">
+                <label asp-for="QuantityNeeded"></label>
+                <input asp-for="QuantityNeeded" class="form-control" type="number" />
+                <span asp-validation-for="QuantityNeeded" class="text-danger"></span>
+            </div>
+
+            <div class="sf-form-actions">
+                <button type="submit" class="sf-btn sf-btn-primary">Save Changes</button>
+                <a asp-action="Index" class="sf-btn sf-btn-outline">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

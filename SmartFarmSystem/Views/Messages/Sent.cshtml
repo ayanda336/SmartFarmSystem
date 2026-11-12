@@ -1,0 +1,249 @@
+﻿@model IEnumerable<SmartFarmSystem.Models.Message>
+
+@{
+    ViewData["Title"] = "Sent Messages";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-messages {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-messages-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-messages-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-messages-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-toolbar {
+        display: flex;
+        gap: 0.8rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.55rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+        }
+
+    .sf-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: auto;
+    }
+
+    .sf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+        .sf-table thead th {
+            background: var(--husk);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.66rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--field-deep);
+            text-align: left;
+            padding: 0.7rem 0.9rem;
+            border-bottom: 1px solid var(--furrow);
+        }
+
+        .sf-table tbody td {
+            padding: 0.7rem 0.9rem;
+            border-bottom: 1px solid var(--furrow);
+            vertical-align: middle;
+        }
+
+        .sf-table tbody tr:hover {
+            background: #FBF8F0;
+        }
+
+    .sf-empty-note {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--ink-soft);
+    }
+
+    .sf-actions {
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+    }
+
+    .sf-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        text-decoration: none;
+        transition: background 0.15s ease;
+        border: 1px solid transparent;
+    }
+
+    .sf-icon-view {
+        background: var(--husk);
+        color: var(--ink-soft);
+        border-color: var(--furrow);
+    }
+
+        .sf-icon-view:hover {
+            background: #E7DEC7;
+            color: var(--ink);
+        }
+
+    .sf-icon-delete {
+        background: #FDE8E5;
+        color: #B5502D;
+        border-color: #F5D0C8;
+    }
+
+        .sf-icon-delete:hover {
+            background: #FAD5CF;
+            color: #8C3F20;
+        }
+
+    .sf-status-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.18rem 0.55rem;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .sf-status-read {
+        background: #E7F1E3;
+        color: var(--field-deep);
+    }
+
+    .sf-status-unread {
+        background: #FCF0DC;
+        color: #9C6A1E;
+    }
+</style>
+
+<div class="sf-messages">
+    <div class="sf-messages-header">
+        <span class="sf-messages-eyebrow">Sent</span>
+        <h1 class="sf-messages-title">Sent Messages</h1>
+    </div>
+
+    <div class="sf-toolbar">
+        <a asp-action="Inbox" class="sf-btn sf-btn-outline">← Inbox</a>
+        <a asp-action="Compose" class="sf-btn sf-btn-primary">+ Compose</a>
+    </div>
+
+    <div class="sf-panel">
+        @if (!Model.Any())
+        {
+            <div class="sf-empty-note">You haven't sent any messages yet.</div>
+        }
+        else
+        {
+            <table class="sf-table">
+                <thead>
+                    <tr>
+                        <th>To</th>
+                        <th>Subject</th>
+                        <th>Sent</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Receiver?.Email</td>
+                            <td>@item.Subject</td>
+                            <td>@item.SentAt.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                <span class="sf-status-badge @(item.IsRead ? "sf-status-read" : "sf-status-unread")">
+                                    @(item.IsRead ? "Read" : "Unread")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="sf-actions">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="sf-icon-btn sf-icon-view" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline;"
+                                          onsubmit="return confirm('Delete this message?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="sf-icon-btn sf-icon-delete" title="Delete" style="border:none;">
+                                            <i class="fas fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

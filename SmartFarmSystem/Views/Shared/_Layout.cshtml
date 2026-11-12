@@ -1,0 +1,341 @@
+﻿@using Microsoft.AspNetCore.Identity
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartFarm</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- FontAwesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SmartFarmSystem.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- ===== WRAPPER ===== -->
+    <div class="wrapper">
+        <!-- ===== SIDEBAR ===== -->
+        <nav id="sidebar" class="sidebar">
+            <!-- Brand / Logo -->
+            <div class="sidebar-brand">
+                <a class="d-flex align-items-center text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-seedling me-2" style="font-size: 2rem; color: #7CB342;"></i>
+                    <div>
+                        <span class="fw-bold" style="font-size: 1.3rem; color: #fff;">SmartFarm</span>
+                        <small class="d-block text-muted" style="font-size: 0.55rem; margin-top: -2px; color: rgba(255,255,255,0.5) !important;">
+                            <i class="fas fa-tractor me-1"></i> Management
+                        </small>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Sidebar Navigation -->
+            <ul class="sidebar-nav">
+                <!-- Home -->
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"
+                       asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <!-- Projects (Admin & Manager) -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Projects" ? "active" : "")"
+                           asp-area="" asp-controller="Projects" asp-action="Index">
+                            <i class="fas fa-diagram-project"></i>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- Workers (Admin & Manager) -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Workers" ? "active" : "")"
+                           asp-area="" asp-controller="Workers" asp-action="Index">
+                            <i class="fas fa-users"></i>
+                            <span>Workers</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- Resources (Admin & Manager) -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Resources" ? "active" : "")"
+                           asp-area="" asp-controller="Resources" asp-action="Index">
+                            <i class="fas fa-cubes"></i>
+                            <span>Resources</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- Tasks (Admin & Manager) -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Tasks" ? "active" : "")"
+                           asp-area="" asp-controller="Tasks" asp-action="Index">
+                            <i class="fas fa-list-check"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- Expenses (Admin & Manager) -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Expenses" ? "active" : "")"
+                           asp-area="" asp-controller="Expenses" asp-action="Index">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Expenses</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- Sales (Admin & Manager) -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Sales" ? "active" : "")"
+                           asp-area="" asp-controller="Sales" asp-action="Index">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Sales</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- ===== NEW: Leave Requests (Admin & Manager) ===== -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "LeaveRequests" ? "active" : "")"
+                           asp-area="" asp-controller="LeaveRequests" asp-action="Index">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Leave Requests</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- My Tasks (Worker only) -->
+                @if (User.IsInRole("Worker"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "WorkerDashboard" ? "active" : "")"
+                           asp-area="" asp-controller="WorkerDashboard" asp-action="Index">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>My Tasks</span>
+                        </a>
+                    </li>
+
+                   
+                }
+                @if (User.IsInRole("Worker"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "LeaveRequests" ? "active" : "")"
+                           asp-area="" asp-controller="LeaveRequests" asp-action="Index">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>My Leave</span>
+                        </a>
+                    </li>
+                }
+
+               @*  <!-- ===== NEW: Messages (All authenticated users) ===== -->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Messages" ? "active" : "")"
+                           asp-area="" asp-controller="Messages" asp-action="Inbox">
+                            <i class="fas fa-envelope"></i>
+                            <span>Messages</span>
+                        </a>
+                    </li>
+                } *@
+
+                <!-- Admin Dropdown (Admin only) -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Admin</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard">
+                                    <i class="fas fa-chart-pie me-2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="Index">
+                                    <i class="fas fa-users-cog me-2"></i> Manage Users
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="CreateUser">
+                                    <i class="fas fa-user-plus me-2"></i> Create User
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="LinkWorker">
+                                    <i class="fas fa-link me-2"></i> Link Worker
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="AuditLog">
+                                    <i class="fas fa-clock-rotate-left me-2"></i> Audit Log
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="ExportUsers">
+                                    <i class="fas fa-file-csv me-2"></i> Export Users
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="ExportProjects">
+                                    <i class="fas fa-file-csv me-2"></i> Export Projects
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+
+            <!-- Sidebar Footer (User Info & Logout) -->
+            <div class="sidebar-footer">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="user-info">
+                        <i class="fas fa-user-circle" style="font-size: 1.8rem; color: #7CB342;"></i>
+                        <div class="user-details">
+                            <span class="user-name">@User.Identity?.Name</span>
+                            <span class="user-role">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span>Administrator</span>
+                                }
+                                else if (User.IsInRole("Manager"))
+                                {
+                                    <span>Manager</span>
+                                }
+                                else if (User.IsInRole("Worker"))
+                                {
+                                    <span>Worker</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                        <button type="submit" class="btn-logout">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <div class="d-grid gap-2">
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-sign-in-alt me-2"></i> Login
+                        </a>
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-success btn-sm">
+                            <i class="fas fa-user-plus me-2"></i> Register
+                        </a>
+                    </div>
+                }
+            </div>
+        </nav>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div id="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button id="sidebarToggle" class="btn btn-outline-secondary btn-sm" type="button">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <span class="ms-3 text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i> @DateTime.Now.ToString("dddd, MMMM dd, yyyy")
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <!-- Notifications Bell -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="btn btn-outline-light position-relative me-2" asp-controller="Notifications" asp-action="Index"
+                               style="font-size: 1.2rem; border: none; color: #333;">
+                                <i class="fas fa-bell"></i>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    var notificationService = Context.RequestServices.GetService<SmartFarmSystem.Services.INotificationService>();
+                                    if (notificationService != null)
+                                    {
+                                        var userManager = Context.RequestServices.GetService<UserManager<IdentityUser>>();
+                                        if (userManager != null)
+                                        {
+                                            var user = await userManager.GetUserAsync(User);
+                                            if (user != null)
+                                            {
+                                                var count = await notificationService.GetUnreadCount(user.Id);
+                                                if (count > 0)
+                                                {
+                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                          style="font-size: 0.6rem;">
+                                                        @count
+                                                        <span class="visually-hidden">unread notifications</span>
+                                                    </span>
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            </a>
+                        }
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="main-content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        $(document).ready(function() {
+            $('#sidebarToggle').on('click', function() {
+                $('#sidebar').toggleClass('collapsed');
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,228 @@
+﻿@model SmartFarmSystem.Models.Worker
+@{
+    ViewData["Title"] = "Add Worker";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-form {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-form-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-form-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-form-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.7rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-alert-danger {
+        background: #F6E4DC;
+        color: var(--clay);
+        border: 1px solid #EAC4B4;
+        border-radius: 6px;
+        padding: 0.85rem 1rem;
+        font-size: 0.88rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-formcard {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        padding: 1.75rem;
+        max-width: 480px;
+    }
+
+    .sf-field {
+        margin-bottom: 1.2rem;
+    }
+
+        .sf-field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
+        }
+
+        .sf-field .form-control {
+            border: 1px solid var(--furrow);
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.92rem;
+            width: 100%;
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+            .sf-field .form-control:focus {
+                outline: none;
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+    .sf-checkfield {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.3rem;
+        font-size: 0.9rem;
+        color: var(--ink);
+    }
+
+        .sf-checkfield input {
+            accent-color: var(--field);
+            width: 16px;
+            height: 16px;
+        }
+
+    .sf-hint {
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+        margin-top: 0.3rem;
+    }
+
+    .sf-form-actions {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+            color: var(--ink);
+        }
+</style>
+
+<div class="sf-form">
+    <div class="sf-form-header">
+        <span class="sf-form-eyebrow">Worker management</span>
+        <h1 class="sf-form-title">Add New Worker</h1>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="sf-alert-danger"></div>
+
+    <div class="sf-formcard">
+        <form asp-action="Create" id="createWorkerForm">
+            <div class="sf-field">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="sf-field">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="sf-field">
+                <label asp-for="HireDate"></label>
+                <input asp-for="HireDate" class="form-control" type="date" id="hireDateInput" />
+                <span asp-validation-for="HireDate" class="text-danger"></span>
+                <div class="sf-hint">Hire date cannot be in the future.</div>
+            </div>
+
+            <div class="sf-checkfield">
+                <input asp-for="IsActive" />
+                <label asp-for="IsActive"></label>
+            </div>
+
+            <div class="sf-form-actions">
+                <button type="submit" class="sf-btn sf-btn-primary">Create</button>
+                <a asp-action="Index" class="sf-btn sf-btn-outline">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        (function () {
+            var hireDateInput = document.getElementById('hireDateInput');
+            var form = document.getElementById('createWorkerForm');
+
+            function getTodayString() {
+                var today = new Date();
+                var yyyy = today.getFullYear();
+                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                var dd = String(today.getDate()).padStart(2, '0');
+                return yyyy + '-' + mm + '-' + dd;
+            }
+
+            var todayStr = getTodayString();
+
+            hireDateInput.setAttribute('max', todayStr);
+
+            form.addEventListener('submit', function (e) {
+                if (hireDateInput.value && hireDateInput.value > todayStr) {
+                    e.preventDefault();
+                    alert('Hire date cannot be in the future.');
+                    hireDateInput.focus();
+                }
+            });
+        })();
+    </script>
+}

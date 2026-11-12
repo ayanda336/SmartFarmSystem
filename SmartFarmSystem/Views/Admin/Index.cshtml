@@ -1,0 +1,332 @@
+﻿@using System.Security.Claims
+@model List<SmartFarmSystem.ViewModels.UserRoleViewModel>
+@{
+    ViewData["Title"] = "User Management";
+    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-users {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold: #C98A2B;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-users-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-users-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-users-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-alert-success {
+        background: #E7F1E3;
+        color: var(--field-deep);
+        border: 1px solid #CBDFC3;
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .sf-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.5rem 0.9rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+            color: var(--ink);
+        }
+
+    .sf-btn-sm {
+        font-size: 0.78rem;
+        padding: 0.35rem 0.7rem;
+    }
+
+    .sf-btn-gold {
+        background: #FCF0DC;
+        color: var(--gold-deep);
+        border-color: #EFD9A8;
+    }
+
+        .sf-btn-gold:hover {
+            background: #F7E4BE;
+            color: var(--gold-deep);
+        }
+
+    .sf-btn-clay {
+        background: var(--clay);
+        color: #fff;
+    }
+
+        .sf-btn-clay:hover {
+            background: #9C4224;
+            color: #fff;
+        }
+
+    .sf-btn-ghost {
+        background: transparent;
+        color: var(--ink-soft);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-ghost:hover {
+            background: var(--husk);
+        }
+
+    .sf-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .sf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        margin: 0;
+    }
+
+        .sf-table thead th {
+            background: var(--husk);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--field-deep);
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--furrow);
+        }
+
+        .sf-table tbody td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--furrow);
+            vertical-align: middle;
+        }
+
+        .sf-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sf-table tbody tr:hover {
+            background: #FBF8F0;
+        }
+
+    .sf-role-tag {
+        display: inline-block;
+        font-size: 0.76rem;
+        font-weight: 600;
+        background: #E7EEF6;
+        color: #2E4F6B;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+        margin-right: 0.3rem;
+    }
+
+    .sf-role-none {
+        color: var(--ink-soft);
+        font-style: italic;
+        font-size: 0.85rem;
+    }
+
+    .sf-status-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .sf-status-active {
+        background: #E7F1E3;
+        color: var(--field-deep);
+    }
+
+    .sf-status-inactive {
+        background: var(--husk);
+        color: var(--ink-soft);
+    }
+
+    .sf-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        align-items: center;
+    }
+</style>
+
+<div class="sf-users">
+    <div class="sf-users-header">
+        <span class="sf-users-eyebrow">Admin</span>
+        <h1 class="sf-users-title">User Management</h1>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="sf-alert-success">@TempData["Message"]</div>
+    }
+
+    <div class="sf-toolbar">
+        <a asp-action="CreateUser" class="sf-btn sf-btn-primary">+ Create User</a>
+        <a asp-action="LinkWorker" class="sf-btn sf-btn-outline">Link Worker to User</a>
+        <a asp-action="AuditLog" class="sf-btn sf-btn-outline">Audit Log</a>
+        <a asp-action="ExportUsers" class="sf-btn sf-btn-outline">Export Users (CSV)</a>
+        <a asp-action="ExportProjects" class="sf-btn sf-btn-outline">Export Projects (CSV)</a>
+    </div>
+
+    <div class="sf-panel">
+        <table class="sf-table" id="sf-users-table" data-current-user-id="@currentUserId">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Current role(s)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr data-user-id="@item.User.Id">
+                        <td>@item.User.Email</td>
+                        <td>
+                            @if (item.Roles.Any())
+                            {
+                                @foreach (var role in item.Roles)
+                                {
+                                    <span class="sf-role-tag">@role</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="sf-role-none">No role assigned</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsActive)
+                            {
+                                <span class="sf-status-badge sf-status-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="sf-status-badge sf-status-inactive">Deactivated</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="sf-actions">
+                                <a asp-action="ManageRoles" asp-route-id="@item.User.Id" class="sf-btn sf-btn-sm sf-btn-outline">Manage Roles</a>
+                                <a asp-action="ResetPassword" asp-route-id="@item.User.Id" class="sf-btn sf-btn-sm sf-btn-gold">Reset Password</a>
+
+                                <form asp-action="ToggleActive" asp-route-id="@item.User.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    @if (item.IsActive)
+                                    {
+                                        <button type="submit" formmethod="post" class="sf-btn sf-btn-sm sf-btn-ghost"
+                                                onclick="return confirm('Deactivate @item.User.Email?');">
+                                            Deactivate
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" formmethod="post" class="sf-btn sf-btn-sm sf-btn-outline">
+                                            Reactivate
+                                        </button>
+                                    }
+                                </form>
+
+                                <form asp-action="DeleteUser" asp-route-id="@item.User.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" formmethod="post" class="sf-btn sf-btn-sm sf-btn-clay"
+                                            onclick="return confirm('Delete @item.User.Email? This cannot be undone.');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var table = document.getElementById('sf-users-table');
+        if (!table) return;
+
+        var currentUserId = table.dataset.currentUserId;
+        if (!currentUserId) return;
+
+        var ownRow = table.querySelector('tr[data-user-id="' + currentUserId + '"]');
+        if (!ownRow) return;
+
+        var actionsCell = ownRow.querySelector('.sf-actions');
+        if (actionsCell) {
+            actionsCell.style.display = 'none';
+        }
+    });
+</script>

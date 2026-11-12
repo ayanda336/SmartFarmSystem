@@ -1,0 +1,62 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="sf-book">
+    <div class="sf-cover">
+        <div>
+            <svg class="sf-brand-mark" viewBox="0 0 34 34" fill="none" stroke="#E9F1E6" stroke-width="1.6">
+                <path d="M6 28c6-12 9-16.5 11-21 2 4.5 5 9 11 21" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M17 9v19" stroke-linecap="round" />
+            </svg>
+            <div class="sf-brand">SmartFarm</div>
+            <div class="sf-cover-title">Start your journey with SmartFarm.</div>
+            <p class="sf-cover-sub">Create an account to manage your projects, workers, resources, tasks, expenses and sales – all in one place.</p>
+        </div>
+        <div class="sf-cover-foot">SmartFarm · New user</div>
+    </div>
+
+    <div class="sf-page">
+        <div class="sf-dogear"></div>
+        <span class="sf-page-eyebrow">Create your account</span>
+        <h1 class="sf-page-title">@ViewData["Title"]</h1>
+        <hr />
+
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="sf-field">
+                <label asp-for="Input.Email">Email</label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="sf-field">
+                <label asp-for="Input.Password">Password</label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="sf-field">
+                <label asp-for="Input.ConfirmPassword">Confirm password</label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirm password" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="sf-submit">Register</button>
+
+            <p class="sf-switch">
+                Already have an account?
+                <a asp-page="./Login">Log in</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="~/css/auth-book.css" />
+    <script src="~/js/auth-book.js"></script>
+}

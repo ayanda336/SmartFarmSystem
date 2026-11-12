@@ -1,0 +1,45 @@
+﻿@model SmartFarmSystem.ViewModels.UserCreatedViewModel
+@{
+    ViewData["Title"] = "User Created";
+}
+<h1>User Created</h1>
+
+@if (Model.EmailFailed)
+{
+    <div class="alert alert-warning">
+        Couldn't send the invitation email automatically. Share this link with the user manually:
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        <strong>@Model.Email</strong> has been created successfully.
+    </div>
+}
+
+<div class="mb-3">
+    <label class="form-label">One-time account setup link</label>
+    <div class="input-group">
+        <input type="text" id="setupLink" class="form-control" value="@Model.SetupLink" readonly />
+        <button class="btn btn-outline-secondary" type="button" onclick="copyLink()">Copy</button>
+    </div>
+    <div class="form-text">
+        Share this link with the user so they can set their own password. It can only be used once.
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-primary">Back to User List</a>
+
+<script>
+    function copyLink() {
+        var input = document.getElementById('setupLink');
+        input.select();
+        input.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(input.value);
+
+        var button = event.target;
+        var originalText = button.textContent;
+        button.textContent = 'Copied!';
+        setTimeout(function () { button.textContent = originalText; }, 1500);
+    }
+</script>

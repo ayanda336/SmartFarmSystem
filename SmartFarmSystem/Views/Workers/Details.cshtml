@@ -1,0 +1,207 @@
+﻿@model SmartFarmSystem.Models.Worker
+@{
+    ViewData["Title"] = "Worker Details";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-detail {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold-deep: #9C6A1E;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-detail-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-detail-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-detail-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-panel-header {
+        padding: 0.9rem 1.3rem;
+        border-bottom: 1px solid var(--furrow);
+        background: var(--husk);
+    }
+
+        .sf-panel-header h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--ink);
+        }
+
+    .sf-panel-body {
+        padding: 1.4rem;
+    }
+
+    .sf-fieldset {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sf-fieldrow {
+        display: flex;
+        padding: 0.7rem 0;
+        border-bottom: 1px dashed var(--furrow);
+        font-size: 0.9rem;
+    }
+
+        .sf-fieldrow:last-child {
+            border-bottom: none;
+        }
+
+        .sf-fieldrow dt {
+            flex: 0 0 180px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            padding-top: 0.15rem;
+        }
+
+        .sf-fieldrow dd {
+            margin: 0;
+            color: var(--ink);
+            flex: 1;
+        }
+
+    .sf-status-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .sf-status-active {
+        background: #E7F1E3;
+        color: var(--field-deep);
+    }
+
+    .sf-status-inactive {
+        background: var(--husk);
+        color: var(--ink-soft);
+    }
+
+    .sf-actions {
+        display: flex;
+        gap: 0.6rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+    }
+
+    .sf-btn-gold {
+        background: #FCF0DC;
+        color: var(--gold-deep);
+        border-color: #EFD9A8;
+    }
+
+        .sf-btn-gold:hover {
+            background: #F7E4BE;
+            color: var(--gold-deep);
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+            color: var(--ink);
+        }
+</style>
+
+<div class="sf-detail">
+    <div class="sf-detail-header">
+        <span class="sf-detail-eyebrow">Worker management</span>
+        <h1 class="sf-detail-title">@Model.FullName</h1>
+    </div>
+
+    <div class="sf-panel">
+        <div class="sf-panel-header"><h2>Worker details</h2></div>
+        <div class="sf-panel-body">
+            <dl class="sf-fieldset">
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.FullName)</dt>
+                    <dd>@Html.DisplayFor(model => model.FullName)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.PhoneNumber)</dt>
+                    <dd>@Html.DisplayFor(model => model.PhoneNumber)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.HireDate)</dt>
+                    <dd>@Model.HireDate.ToShortDateString()</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.IsActive)</dt>
+                    <dd>
+                        @if (Model.IsActive)
+                        {
+                            <span class="sf-status-badge sf-status-active">Active</span>
+                        }
+                        else
+                        {
+                            <span class="sf-status-badge sf-status-inactive">Inactive</span>
+                        }
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <div class="sf-actions">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="sf-btn sf-btn-gold">Edit</a>
+        <a asp-action="Index" class="sf-btn sf-btn-outline">Back to List</a>
+    </div>
+</div>

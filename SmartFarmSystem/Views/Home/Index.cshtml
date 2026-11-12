@@ -1,0 +1,228 @@
+﻿@{
+    ViewData["Title"] = "Home - SmartFarm";
+}
+
+<!-- ===== MAIN CONTENT WRAPPER ===== -->
+<div class="homepage-wrapper">
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero-section mb-5">
+        <div class="container-fluid px-0">
+            <div class="hero-wrapper">
+                <div class="row align-items-center g-0">
+                    <div class="col-lg-6 hero-content">
+                        <div class="hero-text">
+                            <div class="badge bg-success mb-3">
+                                <i class="fas fa-seedling me-1"></i> Farm Management System
+                            </div>
+                            <h1 class="hero-title">
+                                Smart<span class="highlight">Farm</span>
+                                <br />
+                                <span style="font-size: 1.8rem; color: #5D4037;">Project Management System</span>
+                            </h1>
+                            <p class="hero-description">
+                                A centralized platform for managing farming projects, workers, resources,
+                                tasks, expenses, and sales — all in one place.
+                            </p>
+                            <div class="hero-buttons mt-4">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a href="@(User.IsInRole("Admin") || User.IsInRole("Manager") ? Url.Action("Dashboard", "Admin") : Url.Action("Index", "WorkerDashboard"))"
+                                       class="btn btn-primary btn-lg me-2">
+                                        <i class="fas fa-arrow-right me-2"></i> Go to Dashboard
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-lg me-2">
+                                        <i class="fas fa-user-plus me-2"></i> Get Started
+                                    </a>
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success btn-lg">
+                                        <i class="fas fa-sign-in-alt me-2"></i> Login
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 hero-image">
+                        <div class="hero-image-wrapper">
+                            <!-- USING A RELIABLE IMAGE SERVICE WITH FALLBACK -->
+                           
+                            <img src="~/images/chatgpt image sep 1, 2026, 12_18_07 am.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA SECTION ===== -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to <span class="highlight">Streamline</span> Your Farm Operations?</h2>
+            <p class="mb-4">
+                Get started with SmartFarm today and take control of your farming projects.
+            </p>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a href="@(User.IsInRole("Admin") || User.IsInRole("Manager") ? Url.Action("Dashboard", "Admin") : Url.Action("Index", "WorkerDashboard"))"
+                   class="btn btn-light btn-lg">
+                    <i class="fas fa-arrow-right me-2"></i> Go to Dashboard
+                </a>
+            }
+            else
+            {
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-light btn-lg">
+                    <i class="fas fa-user-plus me-2"></i> Create Account
+                </a>
+            }
+        </div>
+    </section>
+
+</div>
+
+<!-- ===== ADDITIONAL CSS FOR HOMEPAGE ===== -->
+<style>
+    /* Fix: Ensure homepage takes full height to push footer down */
+    .homepage-wrapper {
+        min-height: calc(100vh - 250px);
+        display: flex;
+        flex-direction: column;
+    }
+
+        .homepage-wrapper .hero-section {
+            flex: 1;
+        }
+
+    /* Hero Section */
+    .hero-wrapper {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+        border-radius: 24px;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #1B1E1F;
+    }
+
+        .hero-title .highlight {
+            color: #2E7D32;
+        }
+
+    .hero-description {
+        font-size: 1.1rem;
+        color: #4E4E4E;
+        max-width: 500px;
+        line-height: 1.7;
+    }
+
+    .hero-image-wrapper img {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        border-radius: 16px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, #1B1E1F 0%, #2E7D32 100%);
+        border-radius: 24px;
+        padding: 3.5rem 2rem;
+        text-align: center;
+        color: white;
+        margin-top: 2rem;
+    }
+
+        .cta-section h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .cta-section .highlight {
+            color: #A5D6A7;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .cta-section .btn-light {
+            background: white;
+            color: #2E7D32;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 0.8rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+            .cta-section .btn-light:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+            }
+
+    /* Button Overrides */
+    .hero-buttons .btn-outline-success {
+        color: #2E7D32;
+        border-color: #2E7D32;
+    }
+
+        .hero-buttons .btn-outline-success:hover {
+            background: #2E7D32;
+            color: white;
+        }
+
+    /* Responsive */
+    @@media (max-width: 992px) {
+        .hero-title
+
+    {
+        font-size: 2.2rem;
+    }
+
+    .hero-image-wrapper img {
+        height: 250px;
+    }
+
+    .homepage-wrapper {
+        min-height: calc(100vh - 200px);
+    }
+
+    }
+
+    @@media (max-width: 768px) {
+        .hero-wrapper
+
+    {
+        padding: 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+    }
+
+    .cta-section {
+        padding: 2rem 1.5rem;
+    }
+
+        .cta-section h2 {
+            font-size: 1.6rem;
+        }
+
+    .homepage-wrapper {
+        min-height: calc(100vh - 180px);
+    }
+
+    }
+</style>

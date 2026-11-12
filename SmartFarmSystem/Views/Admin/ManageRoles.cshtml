@@ -1,0 +1,203 @@
+﻿@model SmartFarmSystem.ViewModels.UserRoleViewModel
+@{
+    ViewData["Title"] = "Manage Roles";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-form {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-form-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-form-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-form-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.7rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+        .sf-form-title span {
+            color: var(--field-deep);
+            font-weight: 500;
+        }
+
+    .sf-formcard {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        padding: 1.75rem;
+        max-width: 480px;
+    }
+
+    .sf-field {
+        margin-bottom: 1.2rem;
+    }
+
+        .sf-field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
+        }
+
+        .sf-field .form-select {
+            border: 1px solid var(--furrow);
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.92rem;
+            width: 100%;
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+            .sf-field .form-select:focus {
+                outline: none;
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+            .sf-field .form-select option {
+                padding: 0.3rem;
+            }
+
+    .sf-form-actions {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+            color: var(--ink);
+        }
+
+    .sf-current-role {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin-bottom: 0.8rem;
+        padding: 0.5rem 0.8rem;
+        background: var(--husk);
+        border-radius: 6px;
+    }
+
+        .sf-current-role strong {
+            color: var(--ink);
+        }
+</style>
+
+<div class="sf-form">
+    <div class="sf-form-header">
+        <span class="sf-form-eyebrow">Admin &middot; User management</span>
+        <h1 class="sf-form-title">Manage Roles for <span>@Model.User?.Email</span></h1>
+    </div>
+
+    <div class="sf-formcard">
+        <!-- Display current role -->
+        <div class="sf-current-role">
+            <i class="fas fa-user-tag me-1"></i>
+            Current role:
+            <strong>
+                @if (Model.Roles != null && Model.Roles.Any())
+                {
+                    @string.Join(", ", Model.Roles)
+                }
+                else
+                {
+                    <span style="color: var(--ink-soft);">No role assigned</span>
+                }
+            </strong>
+        </div>
+
+        <form asp-action="ManageRoles" method="post">
+            <input type="hidden" name="id" value="@Model.User?.Id" />
+
+            <div class="sf-field">
+                <label>Assign New Role</label>
+                <select name="selectedRole" class="form-select">
+                    <option value="">-- No Role --</option>
+                    @if (Model.AllRoles != null)
+                    {
+                        @foreach (var role in Model.AllRoles)
+                        {
+                            @if (role.Name != "Admin")
+                            {
+                                var isSelected = Model.Roles != null && Model.Roles.Contains(role.Name);
+                                <option value="@role.Name" selected="@isSelected">@role.Name</option>
+                            }
+                        }
+                    }
+                </select>
+                <small style="color: var(--ink-soft); font-size: 0.75rem; display: block; margin-top: 0.3rem;">
+                    <i class="fas fa-info-circle me-1"></i>
+                    You can only assign Manager or Worker roles. The Admin role is system-assigned.
+                </small>
+            </div>
+
+            <div class="sf-form-actions">
+                <button type="submit" class="sf-btn sf-btn-primary">
+                    <i class="fas fa-save me-1"></i> Save Roles
+                </button>
+                <a asp-action="Index" class="sf-btn sf-btn-outline">
+                    <i class="fas fa-arrow-left me-1"></i> Back to User List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

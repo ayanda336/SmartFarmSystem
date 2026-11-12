@@ -1,0 +1,283 @@
+﻿:root {
+    --field: #3F6B35;
+    --field-deep: #23391E;
+    --field-mid: #2E4F27;
+    --field-light: #E9F1E6;
+    --ink: #1E281B;
+    --ink-soft: #5B6656;
+    --paper: #FFFFFF;
+    --paper-shade: #F4F7F2;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: radial-gradient(1200px 600px at 20% -10%, #4A7A3F 0%, transparent 60%), radial-gradient(900px 500px at 100% 110%, #1B2E16 0%, transparent 55%), var(--field-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+}
+
+.sf-book {
+    width: 100%;
+    max-width: 880px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    background: var(--paper);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.45);
+    position: relative;
+    transform-origin: left center;
+}
+
+    .sf-book::after {
+        content: "";
+        position: absolute;
+        inset: 6px -6px -6px 6px;
+        background: var(--paper-shade);
+        border-radius: 8px;
+        z-index: -1;
+        box-shadow: 3px 4px 0 -1px var(--paper), 3px 4px 0 0 #E3E9DF, 7px 9px 0 -1px var(--paper), 7px 9px 0 0 #D7DFD1;
+    }
+
+.sf-cover {
+    background: linear-gradient(165deg, var(--field-mid) 0%, var(--field-deep) 100%);
+    color: var(--field-light);
+    padding: 2.75rem 2.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+    .sf-cover::before {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border: 1px solid rgba(233, 241, 230, 0.18);
+        border-radius: 4px;
+        pointer-events: none;
+    }
+
+.sf-brand {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.sf-brand-mark {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 1.4rem;
+}
+
+.sf-cover-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.9rem;
+    line-height: 1.2;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.sf-cover-sub {
+    font-size: 0.95rem;
+    color: rgba(233, 241, 230, 0.75);
+    line-height: 1.6;
+    max-width: 28ch;
+}
+
+.sf-cover-foot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(233, 241, 230, 0.55);
+}
+
+.sf-page {
+    background: var(--paper);
+    padding: 2.75rem 2.75rem 2.5rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+    .sf-page::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 26px;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.14), transparent);
+        pointer-events: none;
+    }
+
+.sf-dogear {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, transparent 50%, var(--paper-shade) 50%);
+    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.sf-page-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.6rem;
+    margin: 0 0 0.3rem;
+}
+
+.sf-page-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--field);
+    margin-bottom: 0.6rem;
+    display: block;
+}
+
+.sf-page hr {
+    border: none;
+    border-top: 1px dashed #D7DFD1;
+    margin: 1.1rem 0 1.4rem;
+}
+
+.sf-field {
+    margin-bottom: 1.1rem;
+}
+
+    .sf-field label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--ink-soft);
+        margin-bottom: 0.35rem;
+    }
+
+    .sf-field .form-control {
+        border: 1px solid #D7DFD1;
+        border-radius: 6px;
+        padding: 0.65rem 0.8rem;
+        font-size: 0.95rem;
+        width: 100%;
+    }
+
+        .sf-field .form-control:focus {
+            outline: none;
+            border-color: var(--field);
+            box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.15);
+        }
+
+.sf-remember {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.4rem;
+}
+
+    .sf-remember input {
+        accent-color: var(--field);
+        width: 16px;
+        height: 16px;
+    }
+
+.sf-submit {
+    width: 100%;
+    background: var(--field);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    font-size: 0.98rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+    .sf-submit:hover {
+        background: var(--field-mid);
+    }
+
+.sf-switch {
+    margin-top: 1.3rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    text-align: center;
+}
+
+    .sf-switch a {
+        color: var(--field);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .sf-switch a:hover {
+            text-decoration: underline;
+        }
+
+.text-danger {
+    color: #B5502D !important;
+    font-size: 0.82rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .sf-book {
+        animation: sfPageSettle 480ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+        .sf-book.is-turning {
+            animation: sfPageTurn 480ms cubic-bezier(0.45, 0, 0.55, 1) forwards;
+        }
+
+    @keyframes sfPageSettle {
+        from {
+            transform: rotateY(10deg) translateX(-10px);
+            opacity: 0;
+        }
+
+        to {
+            transform: rotateY(0deg) translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes sfPageTurn {
+        0% {
+            transform: rotateY(0deg);
+        }
+
+        100% {
+            transform: rotateY(-18deg) translateX(-14px);
+            opacity: 0.35;
+        }
+    }
+}
+
+@media (max-width: 720px) {
+    .sf-book {
+        grid-template-columns: 1fr;
+    }
+
+    .sf-cover {
+        display: none;
+    }
+
+    .sf-page::before {
+        display: none;
+    }
+}

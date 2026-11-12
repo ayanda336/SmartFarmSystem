@@ -1,0 +1,233 @@
+﻿@model SmartFarmSystem.Models.Sale
+@{
+    ViewData["Title"] = "Delete Sale";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-detail {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --clay: #B5502D;
+        --clay-deep: #9C4224;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-detail-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .sf-detail-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--clay);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-detail-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.7rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-warn-panel {
+        background: #F6E4DC;
+        border: 1px solid #EAC4B4;
+        border-left: 3px solid var(--clay);
+        border-radius: 6px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+        .sf-warn-panel strong {
+            color: var(--clay-deep);
+            font-size: 1rem;
+        }
+
+    .sf-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-panel-header {
+        padding: 0.9rem 1.3rem;
+        border-bottom: 1px solid var(--furrow);
+        background: var(--husk);
+    }
+
+        .sf-panel-header h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--ink);
+        }
+
+    .sf-panel-body {
+        padding: 1.4rem;
+    }
+
+    .sf-fieldset {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sf-fieldrow {
+        display: flex;
+        padding: 0.7rem 0;
+        border-bottom: 1px dashed var(--furrow);
+        font-size: 0.9rem;
+    }
+
+        .sf-fieldrow:last-child {
+            border-bottom: none;
+        }
+
+        .sf-fieldrow dt {
+            flex: 0 0 180px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            padding-top: 0.15rem;
+        }
+
+        .sf-fieldrow dd {
+            margin: 0;
+            color: var(--ink);
+            flex: 1;
+        }
+
+    .sf-money {
+        font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .sf-total {
+        font-family: 'IBM Plex Mono', monospace;
+        font-weight: 700;
+        color: var(--field-deep);
+    }
+
+    .sf-actions {
+        display: flex;
+        gap: 0.6rem;
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        text-decoration: none;
+    }
+
+    .sf-btn-clay {
+        background: var(--clay);
+        color: #fff;
+    }
+
+        .sf-btn-clay:hover {
+            background: var(--clay-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+            color: var(--ink);
+        }
+</style>
+
+<div class="sf-detail">
+    <div class="sf-detail-header">
+        <span class="sf-detail-eyebrow">Sales management &middot; Delete</span>
+        <h1 class="sf-detail-title">Delete Sale</h1>
+    </div>
+
+    <div class="sf-warn-panel">
+        <strong>Are you sure you want to delete this sale?</strong>
+    </div>
+
+    <div class="sf-panel">
+        <div class="sf-panel-header"><h2>@Model.ProductName</h2></div>
+        <div class="sf-panel-body">
+            <dl class="sf-fieldset">
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.Quantity)</dt>
+                    <dd>@Html.DisplayFor(model => model.Quantity)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.Unit)</dt>
+                    <dd>@Html.DisplayFor(model => model.Unit)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.UnitPrice)</dt>
+                    <dd><span class="sf-money">R @Model.UnitPrice.ToString("N2")</span></dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.TotalAmount)</dt>
+                    <dd><span class="sf-total">R @Model.TotalAmount.ToString("N2")</span></dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.SaleDate)</dt>
+                    <dd>@Html.DisplayFor(model => model.SaleDate)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.BuyerName)</dt>
+                    <dd>@Html.DisplayFor(model => model.BuyerName)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.BuyerContact)</dt>
+                    <dd>@Html.DisplayFor(model => model.BuyerContact)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.Reference)</dt>
+                    <dd>@Html.DisplayFor(model => model.Reference)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.Project)</dt>
+                    <dd>@Html.DisplayFor(model => model.Project.Name)</dd>
+                </div>
+                <div class="sf-fieldrow">
+                    <dt>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+                    <dd>@Html.DisplayFor(model => model.CreatedAt)</dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <form asp-action="Delete" class="sf-actions">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="sf-btn sf-btn-clay">Confirm Delete</button>
+        <a asp-action="Index" class="sf-btn sf-btn-outline">Back to List</a>
+    </form>
+</div>

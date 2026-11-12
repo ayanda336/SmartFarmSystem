@@ -1,0 +1,335 @@
+﻿@model IEnumerable<SmartFarmSystem.Models.LeaveRequest>
+
+@{
+    ViewData["Title"] = "Leave Requests";
+    var isAdminOrManager = User.IsInRole("Admin") || User.IsInRole("Manager");
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-leave {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold: #C98A2B;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-leave-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-leave-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-leave-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    .sf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.55rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
+        transition: background 0.15s ease;
+    }
+
+    .sf-btn-primary {
+        background: var(--field);
+        color: #fff;
+    }
+
+        .sf-btn-primary:hover {
+            background: var(--field-deep);
+            color: #fff;
+        }
+
+    .sf-btn-outline {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--furrow);
+    }
+
+        .sf-btn-outline:hover {
+            background: var(--husk);
+        }
+
+    .sf-btn-sm {
+        font-size: 0.78rem;
+        padding: 0.3rem 0.7rem;
+    }
+
+    .sf-btn-gold {
+        background: #FCF0DC;
+        color: var(--gold-deep);
+        border-color: #EFD9A8;
+    }
+
+        .sf-btn-gold:hover {
+            background: #F7E4BE;
+        }
+
+    .sf-btn-green {
+        background: #E7F1E3;
+        color: var(--field-deep);
+        border-color: #C8DFC0;
+    }
+
+        .sf-btn-green:hover {
+            background: #D4E8CD;
+        }
+
+    .sf-btn-red {
+        background: #FDE8E5;
+        color: var(--clay);
+        border-color: #F5D0C8;
+    }
+
+        .sf-btn-red:hover {
+            background: #FAD5CF;
+        }
+
+    .sf-btn-disabled {
+        cursor: default;
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    .sf-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: auto;
+    }
+
+    .sf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+        .sf-table thead th {
+            background: var(--husk);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.66rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--field-deep);
+            text-align: left;
+            padding: 0.7rem 0.9rem;
+            border-bottom: 1px solid var(--furrow);
+        }
+
+        .sf-table tbody td {
+            padding: 0.7rem 0.9rem;
+            border-bottom: 1px solid var(--furrow);
+            vertical-align: middle;
+        }
+
+        .sf-table tbody tr:hover {
+            background: #FBF8F0;
+        }
+
+    .sf-status-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.18rem 0.55rem;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .sf-status-pending {
+        background: #FCF0DC;
+        color: var(--gold-deep);
+    }
+
+    .sf-status-approved {
+        background: #E7F1E3;
+        color: var(--field-deep);
+    }
+
+    .sf-status-rejected {
+        background: #FDE8E5;
+        color: var(--clay);
+    }
+
+    .sf-actions {
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+    }
+
+    .sf-empty-panel {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--ink-soft);
+    }
+
+    .sf-empty-icon {
+        color: var(--field);
+        margin-bottom: 0.6rem;
+    }
+
+    .sf-empty-panel p {
+        margin: 0 0 1rem;
+    }
+
+    .sf-toolbar {
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        align-items: center;
+    }
+
+    .sf-stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .sf-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+    }
+
+        .sf-stat strong {
+            color: var(--ink);
+            font-size: 1.1rem;
+        }
+
+        .sf-stat .pending-count {
+            color: var(--gold-deep);
+        }
+
+        .sf-stat .approved-count {
+            color: var(--field-deep);
+        }
+
+        .sf-stat .rejected-count {
+            color: var(--clay);
+        }
+</style>
+
+<div class="sf-leave">
+    <div class="sf-leave-header">
+        <span class="sf-leave-eyebrow">Leave management</span>
+        <h1 class="sf-leave-title">@(isAdminOrManager ? "Leave Requests" : "My Leave")</h1>
+    </div>
+
+    @if (isAdminOrManager)
+    {
+        var pendingCount = Model.Count(l => l.Status == "Pending");
+        var approvedCount = Model.Count(l => l.Status == "Approved");
+        var rejectedCount = Model.Count(l => l.Status == "Rejected");
+
+        <div class="sf-stats">
+            <span class="sf-stat"><i class="fas fa-list"></i> Total: <strong>@Model.Count()</strong></span>
+            <span class="sf-stat"><i class="fas fa-hourglass-half"></i> Pending: <strong class="pending-count">@pendingCount</strong></span>
+            <span class="sf-stat"><i class="fas fa-circle-check"></i> Approved: <strong class="approved-count">@approvedCount</strong></span>
+            <span class="sf-stat"><i class="fas fa-circle-xmark"></i> Rejected: <strong class="rejected-count">@rejectedCount</strong></span>
+        </div>
+    }
+
+    
+
+    <div class="sf-panel">
+        @if (!Model.Any())
+        {
+            <div class="sf-empty-panel">
+                <div class="sf-empty-icon"><i class="fas fa-inbox fa-2x"></i></div>
+                <p>No leave requests found.</p>
+                @if (!isAdminOrManager)
+                {
+                    <a asp-action="Create" class="sf-btn sf-btn-primary">Request Leave</a>
+                }
+            </div>
+        }
+        else
+        {
+            <table class="sf-table">
+                <thead>
+                    <tr>
+                        @if (isAdminOrManager)
+                        {
+                            <th>Worker</th>
+                        }
+                        <th>Type</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Days</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var statusClass = item.Status == "Pending" ? "sf-status-pending"
+                        : item.Status == "Approved" ? "sf-status-approved"
+                        : "sf-status-rejected";
+                        <tr>
+                            @if (isAdminOrManager)
+                            {
+                                <td>@(item.Worker?.FullName ?? "N/A")</td>
+                            }
+                            <td>@item.LeaveType</td>
+                            <td>@item.StartDate.ToShortDateString()</td>
+                            <td>@item.EndDate.ToShortDateString()</td>
+                            <td>@item.TotalDays</td>
+                            <td><span class="sf-status-badge @statusClass">@item.Status</span></td>
+                            <td>
+                                <div class="sf-actions">
+                                    @if (isAdminOrManager && item.Status == "Pending")
+                                    {
+                                        <a asp-action="Review" asp-route-id="@item.Id" class="sf-btn sf-btn-sm sf-btn-gold">Review</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="sf-btn sf-btn-sm sf-btn-outline sf-btn-disabled">Reviewed</span>
+                                    }
+                                    @if (isAdminOrManager)
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="sf-btn sf-btn-sm sf-btn-red">Delete</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

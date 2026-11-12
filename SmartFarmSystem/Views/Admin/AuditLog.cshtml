@@ -1,0 +1,262 @@
+﻿@model List<SmartFarmSystem.Models.AuditLog>
+@{
+    ViewData["Title"] = "Audit Log";
+}
+
+<style>
+    .sf-audit {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold: #C98A2B;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+    }
+
+    .sf-audit-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-audit-title {
+        font-family: 'Fraunces', 'Georgia', serif;
+        font-weight: 600;
+        font-size: 1.6rem;
+        margin: 0 0 0.25rem;
+        color: var(--ink);
+    }
+
+    .sf-audit-sub {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .sf-audit-count {
+        font-family: 'IBM Plex Mono', monospace;
+        background: var(--husk);
+        border: 1px solid var(--furrow);
+        border-radius: 999px;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.8rem;
+        color: var(--field-deep);
+        white-space: nowrap;
+    }
+
+    .sf-audit-search {
+        margin-bottom: 1rem;
+    }
+
+        .sf-audit-search input {
+            max-width: 320px;
+            border: 1px solid var(--furrow);
+            border-radius: 6px;
+            padding: 0.55rem 0.9rem;
+            font-size: 0.9rem;
+        }
+
+            .sf-audit-search input:focus {
+                outline: none;
+                border-color: var(--field);
+                box-shadow: 0 0 0 3px rgba(63, 107, 53, 0.12);
+            }
+
+    .sf-audit-table-wrap {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .sf-audit-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+        font-size: 0.88rem;
+    }
+
+        .sf-audit-table thead th {
+            background: var(--husk);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--field-deep);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--furrow);
+        }
+
+        .sf-audit-table tbody td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid var(--furrow);
+            vertical-align: middle;
+            color: var(--ink);
+        }
+
+        .sf-audit-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sf-audit-table tbody tr:hover {
+            background: #FBF8F0;
+        }
+
+    .sf-audit-time {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+        white-space: nowrap;
+    }
+
+    .sf-audit-badge {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+        margin-right: 0.5rem;
+        white-space: nowrap;
+    }
+
+    .sf-badge-create {
+        background: #E7F1E3;
+        color: var(--field-deep);
+    }
+
+    .sf-badge-delete {
+        background: #F6E4DC;
+        color: var(--clay);
+    }
+
+    .sf-badge-reset {
+        background: #FCF0DC;
+        color: var(--gold);
+    }
+
+    .sf-badge-role {
+        background: #E7EEF6;
+        color: #2E4F6B;
+    }
+
+    .sf-badge-link {
+        background: #EFEAF6;
+        color: #5B3E8F;
+    }
+
+    .sf-badge-other {
+        background: var(--husk);
+        color: var(--ink-soft);
+    }
+
+    .sf-audit-empty {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--ink-soft);
+    }
+
+    .sf-audit-footer {
+        margin-top: 1.25rem;
+    }
+</style>
+
+<div class="sf-audit">
+    <div class="sf-audit-header">
+        <div>
+            <h1 class="sf-audit-title">Audit Log</h1>
+            <p class="sf-audit-sub">A record of admin actions across the system, most recent first.</p>
+        </div>
+        <span class="sf-audit-count">@Model.Count entries &middot; showing last 200</span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="sf-audit-table-wrap">
+            <div class="sf-audit-empty">No admin actions have been recorded yet.</div>
+        </div>
+    }
+    else
+    {
+        <div class="sf-audit-search">
+            <input type="text" id="auditSearch" class="form-control" placeholder="Filter by admin or action..." onkeyup="sfFilterAudit()" />
+        </div>
+
+        <div class="sf-audit-table-wrap">
+            <table class="sf-audit-table" id="auditTable">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Admin</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        var badgeClass = "sf-badge-other";
+                        var badgeLabel = "Action";
+                        var actionLower = log.Action?.ToLower() ?? "";
+
+                        if (actionLower.Contains("created"))
+                        {
+                            badgeClass = "sf-badge-create"; badgeLabel = "Created";
+                        }
+                        else if (actionLower.Contains("deleted"))
+                        {
+                            badgeClass = "sf-badge-delete"; badgeLabel = "Deleted";
+                        }
+                        else if (actionLower.Contains("reset"))
+                        {
+                            badgeClass = "sf-badge-reset"; badgeLabel = "Password";
+                        }
+                        else if (actionLower.Contains("deactivated") || actionLower.Contains("reactivated"))
+                        {
+                            badgeClass = "sf-badge-reset"; badgeLabel = "Status";
+                        }
+                        else if (actionLower.Contains("role"))
+                        {
+                            badgeClass = "sf-badge-role"; badgeLabel = "Role";
+                        }
+                        else if (actionLower.Contains("linked"))
+                        {
+                            badgeClass = "sf-badge-link"; badgeLabel = "Linked";
+                        }
+
+                        <tr>
+                            <td class="sf-audit-time">@log.Timestamp.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@log.AdminId</td>
+                            <td>
+                                <span class="sf-audit-badge @badgeClass">@badgeLabel</span>@log.Action
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="sf-audit-footer">
+        <a asp-action="Index" class="btn btn-secondary">&larr; Back to User List</a>
+    </div>
+</div>
+
+<script>
+    function sfFilterAudit() {
+        var input = document.getElementById('auditSearch');
+        var filter = input.value.toLowerCase();
+        var rows = document.querySelectorAll('#auditTable tbody tr');
+
+        rows.forEach(function (row) {
+            var text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    }
+</script>

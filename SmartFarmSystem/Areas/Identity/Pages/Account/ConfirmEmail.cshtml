@@ -1,0 +1,113 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .rpc-wrap {
+        --field: #3F6B35;
+        --field-deep: #23391E;
+        --gold: #C98A2B;
+        --gold-deep: #9C6A1E;
+        --kraft: #C7B48C;
+        --kraft-deep: #A8956B;
+        --paper: #FFFDF8;
+        --ink: #26301F;
+        --ink-soft: #6B6252;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 1rem;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+        background: radial-gradient(800px 400px at 15% 0%, rgba(255,255,255,0.15), transparent 60%), linear-gradient(160deg, var(--kraft) 0%, var(--kraft-deep) 100%);
+    }
+
+    .rpc-card {
+        position: relative;
+        width: 100%;
+        max-width: 420px;
+        background: var(--paper);
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 24px 50px -18px rgba(0,0,0,0.4);
+        padding: 2.6rem 2.2rem 2.2rem;
+        margin-top: 14px;
+        text-align: center;
+    }
+
+        .rpc-card::before {
+            content: "";
+            position: absolute;
+            top: -13px;
+            left: 0;
+            right: 0;
+            height: 14px;
+            background: linear-gradient(-45deg, var(--paper) 7px, transparent 0), linear-gradient(45deg, var(--paper) 7px, transparent 0);
+            background-size: 14px 14px;
+            background-position: left top;
+            filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.08));
+        }
+
+    .rpc-seal {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 1.2rem;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #E0A542, var(--gold) 55%, var(--gold-deep) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.25), inset 0 1px 2px rgba(255,255,255,0.4), inset 0 -3px 5px rgba(0,0,0,0.25);
+    }
+
+    .rpc-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.6rem;
+    }
+
+    .rpc-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.75rem;
+        margin: 0 0 1.4rem;
+    }
+
+    .rpc-status-box :deep(.alert),
+    .rpc-status-box .alert {
+        border: none;
+        background: #EEF4EA;
+        color: var(--field-deep);
+        border-radius: 6px;
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+</style>
+
+<div class="rpc-wrap">
+    <div class="rpc-card">
+        <div class="rpc-seal">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFF7E8" stroke-width="1.8">
+                <path d="M4 20c4-8 6-11 8-14 2 3 4 6 8 14" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12 6v14" stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <span class="rpc-eyebrow">Account setup</span>
+        <h1 class="rpc-title">@ViewData["Title"]</h1>
+
+        <div class="rpc-status-box">
+            <partial name="_StatusMessage" model="Model.StatusMessage" />
+        </div>
+    </div>
+</div>

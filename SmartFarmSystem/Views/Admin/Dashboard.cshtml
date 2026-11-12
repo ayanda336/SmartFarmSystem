@@ -1,0 +1,572 @@
+﻿@model SmartFarmSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Farm Dashboard";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    .sf-dash {
+        --field: #3F6B35;
+        --field-deep: #2E4F27;
+        --gold: #C98A2B;
+        --gold-deep: #9C6A1E;
+        --clay: #B5502D;
+        --husk: #F4EFE2;
+        --furrow: #E7DEC7;
+        --paper: #FFFDF8;
+        --ink: #2B2116;
+        --ink-soft: #7C7565;
+        font-family: 'Inter', sans-serif;
+        color: var(--ink);
+    }
+
+    .sf-dash-header {
+        margin-bottom: 1.75rem;
+    }
+
+    .sf-dash-eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--field-deep);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-dash-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+        color: var(--ink);
+    }
+
+    /* Ledger tally strip for the top-level counts */
+    .sf-tally {
+        display: flex;
+        flex-wrap: wrap;
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-tally-item {
+        flex: 1;
+        min-width: 140px;
+        padding: 1.1rem 1.4rem;
+        position: relative;
+    }
+
+        .sf-tally-item + .sf-tally-item {
+            border-left: 1px solid var(--furrow);
+        }
+
+    .sf-tally-label {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.66rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+
+    .sf-tally-value {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: var(--field-deep);
+    }
+
+    /* Financial overview cards */
+    .sf-fin-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1px;
+        background: var(--furrow);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .sf-fin-card {
+        background: var(--paper);
+        padding: 1.3rem 1.4rem;
+        border-top: 3px solid var(--field);
+    }
+
+        .sf-fin-card.clay {
+            border-top-color: var(--clay);
+        }
+
+        .sf-fin-card.gold {
+            border-top-color: var(--gold);
+        }
+
+    .sf-fin-label {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .sf-fin-value {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: var(--field-deep);
+    }
+
+    .sf-fin-card.clay .sf-fin-value {
+        color: var(--clay);
+    }
+
+    .sf-fin-card.gold .sf-fin-value {
+        color: var(--gold-deep);
+    }
+
+    /* Generic panel used for progress, alerts, charts, tables */
+    .sf-panel {
+        background: var(--paper);
+        border: 1px solid var(--furrow);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+
+    .sf-panel-header {
+        padding: 0.9rem 1.3rem;
+        border-bottom: 1px solid var(--furrow);
+        background: var(--husk);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .sf-panel-header h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 1rem;
+            margin: 0;
+            color: var(--ink);
+        }
+
+    .sf-panel-body {
+        padding: 1.3rem;
+    }
+
+    .sf-panel-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    @@media (max-width: 860px) {
+        .sf-panel-row
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    /* Progress bar */
+    .sf-progress-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        margin-bottom: 0.6rem;
+    }
+
+        .sf-progress-labels strong {
+            color: var(--ink);
+        }
+
+    .sf-progress-track {
+        display: flex;
+        height: 22px;
+        border-radius: 5px;
+        overflow: hidden;
+        background: var(--husk);
+        border: 1px solid var(--furrow);
+    }
+
+    .sf-progress-fill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.68rem;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+        .sf-progress-fill.done {
+            background: var(--field);
+        }
+
+        .sf-progress-fill.pending {
+            background: var(--gold);
+        }
+
+    /* Low stock list */
+    .sf-alert-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sf-alert-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.65rem 0;
+        border-bottom: 1px dashed var(--furrow);
+        font-size: 0.9rem;
+    }
+
+        .sf-alert-item:last-child {
+            border-bottom: none;
+        }
+
+    .sf-alert-badge {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        background: #F6E4DC;
+        color: var(--clay);
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .sf-empty-note {
+        color: var(--field-deep);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .sf-muted-note {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    /* Table */
+    .sf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+    }
+
+        .sf-table thead th {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--field-deep);
+            text-align: left;
+            padding: 0.6rem 0.4rem;
+            border-bottom: 1px solid var(--furrow);
+        }
+
+        .sf-table tbody td {
+            padding: 0.6rem 0.4rem;
+            border-bottom: 1px solid var(--furrow);
+        }
+
+        .sf-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sf-table tbody tr:hover {
+            background: #FBF8F0;
+        }
+
+    .sf-status-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+        white-space: nowrap;
+    }
+
+    .sf-status-completed {
+        background: #E7F1E3;
+        color: var(--field-deep);
+    }
+
+    .sf-status-progress {
+        background: #E7EEF6;
+        color: #2E4F6B;
+    }
+
+    .sf-status-pending {
+        background: #FCF0DC;
+        color: var(--gold-deep);
+    }
+
+    /* Top performing projects */
+    .sf-rank-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sf-rank-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.65rem 0;
+        border-bottom: 1px dashed var(--furrow);
+        font-size: 0.9rem;
+    }
+
+        .sf-rank-item:last-child {
+            border-bottom: none;
+        }
+
+    .sf-rank-profit {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.82rem;
+        background: #E7F1E3;
+        color: var(--field-deep);
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+    }
+</style>
+
+<div class="sf-dash">
+    <div class="sf-dash-header">
+        <span class="sf-dash-eyebrow">Overview</span>
+        <h1 class="sf-dash-title">Farm dashboard</h1>
+    </div>
+
+    <!-- Summary tally -->
+    <div class="sf-tally">
+        <div class="sf-tally-item">
+            <span class="sf-tally-label">Projects</span>
+            <span class="sf-tally-value">@Model.TotalProjects</span>
+        </div>
+        <div class="sf-tally-item">
+            <span class="sf-tally-label">Workers</span>
+            <span class="sf-tally-value">@Model.TotalWorkers</span>
+        </div>
+        <div class="sf-tally-item">
+            <span class="sf-tally-label">Resources</span>
+            <span class="sf-tally-value">@Model.TotalResources</span>
+        </div>
+        <div class="sf-tally-item">
+            <span class="sf-tally-label">Total tasks</span>
+            <span class="sf-tally-value">@Model.TotalTasks</span>
+        </div>
+    </div>
+
+    <!-- Financial overview -->
+    <div class="sf-fin-row">
+        <div class="sf-fin-card">
+            <span class="sf-fin-label">Total sales</span>
+            <span class="sf-fin-value">R @(((decimal)ViewBag.GrandTotalSales).ToString("N2"))</span>
+        </div>
+        <div class="sf-fin-card clay">
+            <span class="sf-fin-label">Total expenses</span>
+            <span class="sf-fin-value">R @(((decimal)ViewBag.GrandTotalExpenses).ToString("N2"))</span>
+        </div>
+        <div class="sf-fin-card gold">
+            <span class="sf-fin-label">Net profit</span>
+            <span class="sf-fin-value">R @(((decimal)ViewBag.GrandTotalProfit).ToString("N2"))</span>
+        </div>
+    </div>
+
+    <div class="sf-panel-row">
+        <!-- Task progress -->
+        <div class="sf-panel">
+            <div class="sf-panel-header"><h2>Task progress</h2></div>
+            <div class="sf-panel-body">
+                @{
+                    int completedPercentage = Model.TotalTasks > 0 ? (int)((double)Model.CompletedTasks / Model.TotalTasks * 100) : 0;
+                    int pendingPercentage = Model.TotalTasks > 0 ? (int)((double)Model.PendingTasks / Model.TotalTasks * 100) : 0;
+                }
+                <div class="sf-progress-labels">
+                    <span>Pending: <strong>@Model.PendingTasks</strong></span>
+                    <span>Completed: <strong>@Model.CompletedTasks</strong></span>
+                </div>
+                <div class="sf-progress-track">
+                    <div class="sf-progress-fill done" style="width: @completedPercentage%;">
+                        @if (completedPercentage > 12)
+                        {
+                            @($"{completedPercentage}%")
+                        }
+                    </div>
+                    <div class="sf-progress-fill pending" style="width: @pendingPercentage%;">
+                        @if (pendingPercentage > 12)
+                        {
+                            @($"{pendingPercentage}%")
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low stock alerts -->
+        <div class="sf-panel">
+            <div class="sf-panel-header"><h2>Low stock alerts</h2></div>
+            <div class="sf-panel-body">
+                @if (Model.LowStockResources.Any())
+                {
+                    <ul class="sf-alert-list">
+                        @foreach (var resource in Model.LowStockResources)
+                        {
+                            <li class="sf-alert-item">
+                                @resource.Name
+                                <span class="sf-alert-badge">@resource.Quantity @resource.Unit remaining</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="sf-empty-note">All resources are well-stocked.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="sf-panel-row">
+        <div class="sf-panel">
+            <div class="sf-panel-header"><h2>Project status distribution</h2></div>
+            <div class="sf-panel-body">
+                <canvas id="projectChart" style="max-height: 250px;"></canvas>
+            </div>
+        </div>
+        <div class="sf-panel">
+            <div class="sf-panel-header"><h2>Task status distribution</h2></div>
+            <div class="sf-panel-body">
+                <canvas id="taskChart" style="max-height: 250px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent tasks -->
+    <div class="sf-panel">
+        <div class="sf-panel-header"><h2>Recent tasks</h2></div>
+        <div class="sf-panel-body">
+            @if (Model.RecentTasks.Any())
+            {
+                <table class="sf-table">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Project</th>
+                            <th>Worker</th>
+                            <th>Status</th>
+                            <th>Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var task in Model.RecentTasks)
+                        {
+                            var statusClass = task.Status == "Completed" ? "sf-status-completed"
+                            : task.Status == "In Progress" ? "sf-status-progress"
+                            : "sf-status-pending";
+                            <tr>
+                                <td>@task.Title</td>
+                                <td>@task.Project?.Name</td>
+                                <td>@task.Worker?.FullName</td>
+                                <td><span class="sf-status-badge @statusClass">@task.Status</span></td>
+                                <td>@task.AssignedDate.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="sf-muted-note">No tasks assigned yet.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Top performing projects -->
+    <div class="sf-panel">
+        <div class="sf-panel-header"><h2>Top performing projects</h2></div>
+        <div class="sf-panel-body">
+            @if (ViewBag.TopProjects != null && ((System.Collections.IEnumerable)ViewBag.TopProjects).Cast<dynamic>().Any())
+            {
+                <ul class="sf-rank-list">
+                    @foreach (var item in ViewBag.TopProjects)
+                    {
+                        <li class="sf-rank-item">
+                            @item.ProjectName
+                            <span class="sf-rank-profit">+R @item.Profit.ToString("N2")</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="sf-muted-note">No sales data available yet. Add some sales to see project performance.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const projectCtx = document.getElementById('projectChart').getContext('2d');
+        const projectData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ProjectStatusCounts));
+
+        new Chart(projectCtx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(projectData),
+                datasets: [{
+                    data: Object.values(projectData),
+                    backgroundColor: ['#3F6B35', '#C98A2B', '#B5502D', '#8A8172', '#2E4F27'],
+                    borderWidth: 1,
+                    borderColor: '#FFFDF8'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Inter' } } }
+                }
+            }
+        });
+
+        const taskCtx = document.getElementById('taskChart').getContext('2d');
+        const taskData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TaskStatusCounts));
+
+        new Chart(taskCtx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(taskData),
+                datasets: [{
+                    data: Object.values(taskData),
+                    backgroundColor: ['#C98A2B', '#2E4F6B', '#3F6B35'],
+                    borderWidth: 1,
+                    borderColor: '#FFFDF8'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Inter' } } }
+                }
+            }
+        });
+    </script>
+}
