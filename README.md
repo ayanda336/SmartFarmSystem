@@ -1,2 +1,6 @@
 SmartFarm is a centralized web-based platform that helps farmers and farm managers
 manage their entire farm operation in one place 
+
+##Screenshots
+![Home Page](picture4.jpg)
+![UserManagement Page](picture3.jpg)
